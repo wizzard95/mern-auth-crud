@@ -103,3 +103,16 @@ limpiamos los archivos: app.jsx, index.css y eliminamos app.css
 instalar react-router-dom para la navegacion 
 npm i react-router-dom
 
+===============================================
+usamos react hook forms para validar formularios (en el cliente)
+npm install react-hook-form
+
+==============================================
+crearemos las peticiones hacia el backend
+
+npm i axios
+
+
+==============================================
+solucion de problemas de conexion con front y back
+(back): npm i cors
