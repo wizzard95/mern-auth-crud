@@ -1,5 +1,5 @@
-import { createContext, useState, useContext } from "react";
-import { registerRequest } from "../api/auth";
+import { createContext, useState, useContext, useEffect } from "react";
+import { registerRequest, loginRequest } from "../api/auth";
 
 export const AuthContext = createContext();
 
@@ -43,9 +43,45 @@ export const AuthProvider = ({children}) =>{
          }
     }
 
+const signin = async (user) => {
+    try {
+        console.log('🔍 Enviando login a:', 'http://localhost:3003/api/login')
+        console.log('📤 Datos enviados:', user)
+        const res = await loginRequest(user)
+        console.log('✅ Respuesta completa:', res)
+        console.log('📋 Datos del usuario:', res.data)
+        setUser(res.data)
+        setIsAuthenticated(true)
+    } catch (error) {
+        const data = error?.response?.data
+        if (Array.isArray(data)) {
+            setErrors(data)
+        } else if (data?.message) {
+            setErrors([data.message])
+        } else if (data?.error && Array.isArray(data.error)) {
+            setErrors(data.error)
+        } else if (data) {
+            setErrors([JSON.stringify(data)])
+        } else {
+            setErrors(["Error al iniciar sesión"])
+        }
+    }
+   
+}
+
+useEffect(() => {
+    if (errors.length > 0) {
+        const timer = setTimeout(() => {
+            setErrors([])
+        }, 5000);
+        return () => clearTimeout(timer)
+    }
+}, [errors])
+
     return(
         <AuthContext.Provider value={{
             signup,
+            signin,
             user,
             isAuthenticated,
             errors

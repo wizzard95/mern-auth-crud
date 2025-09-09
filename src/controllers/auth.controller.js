@@ -27,7 +27,13 @@ try{
     const userSaved = await newUser.save();
     const token = await createAccessToken({id: userSaved._id});
 
-    res.cookie('token', token)
+    res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false,
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
     res.json({
             /* message: "User created Succefully", */
            
@@ -46,7 +52,9 @@ try{
 
 
 export const login = async (req, res) =>{
-/*  console.log(req.body); */
+    console.log('🚀 Login endpoint llamado');
+    console.log('📥 Body recibido:', req.body);
+    console.log('🌐 Headers:', req.headers);
     const {email, password} = req.body
 try{
 
@@ -55,21 +63,27 @@ try{
   if(!userFound) return res.status(400).json({ message: "user not found" })
   
   const isMatch =  await bcrypt.compare(password, userFound.password); //
-  if(!isMatch) return res.status(400).json({ message: "Incorrect password" })
+  if(!isMatch) return res.status(400).json({ message: "Incorrect password damian" })
 
 
     const token = await createAccessToken({id: userFound._id});
 
-    res.cookie('token', token)
-    res.json({
-            /* message: "User created Succefully", */
-           
+    res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false,
+        path: '/',
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    })
+    const userData = {
         id: userFound._id,
         username:userFound.username,
         email: userFound.email,
         createdAt: userFound.createdAt,
         updateAt: userFound.updatedAt,
-    }) 
+    }
+    console.log('✅ Enviando respuesta JSON:', userData);
+    res.json(userData) 
 }catch(error){
     /* console.log(error); */
     res.status(500).json({ message: error.message })
