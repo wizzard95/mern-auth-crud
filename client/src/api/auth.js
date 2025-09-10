@@ -8,3 +8,5 @@ export const api = axios.create({
 export const registerRequest = (user) => api.post('/register', user, { withCredentials: true });
 
 export const loginRequest = (user) => api.post('/login', user, { withCredentials: true });
+
+export const verifyTokenRequest = () =>  api.get('/verify')

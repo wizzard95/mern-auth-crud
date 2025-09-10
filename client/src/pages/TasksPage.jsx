@@ -1,12 +1,10 @@
-
-
 function TasksPage() {
-  
-    return(
-      <div>TasksPage</div>
-    )
 
   
+
+  return (
+    <div>TasksPage</div>
+  )
 }
 
-export default TasksPage;
+export default TasksPage
