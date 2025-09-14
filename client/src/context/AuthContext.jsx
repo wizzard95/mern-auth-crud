@@ -18,7 +18,37 @@ export const AuthProvider = ({children}) =>{
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [errors, setErrors] = useState([])
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
+    
+    // Verificar autenticación al cargar
+    useEffect(() => {
+        const checkAuth = async () => {
+            const token = Cookies.get('token')
+            console.log('🔍 Verificando autenticación inicial, token:', !!token)
+            
+            if (token) {
+                setLoading(true)
+                try {
+                    const res = await verifyTokenRequest()
+                    console.log('✅ Token válido en carga inicial:', res.data)
+                    if (res.data) {
+                        setUser(res.data)
+                        setIsAuthenticated(true)
+                    }
+                } catch (error) {
+                    console.log('❌ Error verificando token en carga inicial:', error)
+                    setUser(null)
+                    setIsAuthenticated(false)
+                } finally {
+                    setLoading(false)
+                }
+            } else {
+                setLoading(false)
+            }
+        }
+        
+        checkAuth()
+    }, [])
 
     const signup = async (user) =>{
          try {
@@ -27,6 +57,7 @@ export const AuthProvider = ({children}) =>{
            console.log(res.data);
            setUser(res.data)
            setIsAuthenticated(true)
+           setLoading(false)
          } catch (error) {
             console.log('Error completo:', error);
             console.log('Error response:', error.response);
@@ -44,11 +75,13 @@ export const AuthProvider = ({children}) =>{
             } else {
                setErrors(['Error al registrar usuario'])
             }
+            setLoading(false)
          }
     }
 
 const signin = async (user) => {
     try {
+        setErrors([]) // Limpiar errores anteriores
         console.log('🔍 Enviando login a:', 'http://localhost:3003/api/login')
         console.log('📤 Datos enviados:', user)
         const res = await loginRequest(user)
@@ -56,7 +89,9 @@ const signin = async (user) => {
         console.log('📋 Datos del usuario:', res.data)
         setUser(res.data)
         setIsAuthenticated(true)
+        setLoading(false)
     } catch (error) {
+        console.log('❌ Error en login:', error)
         const data = error?.response?.data
         if (Array.isArray(data)) {
             setErrors(data)
@@ -69,6 +104,7 @@ const signin = async (user) => {
         } else {
             setErrors(["Error al iniciar sesión"])
         }
+        setLoading(false)
     }
    
 }
@@ -82,35 +118,6 @@ useEffect(() => {
     }
 }, [errors])
 
-useEffect(() => {
-  async function checkLogin(){
-     const cookies = Cookies.get();
-
-    if(!cookies.token){
-        setIsAuthenticated(false)
-        setLoading(false)
-        return setUser(null)
-        
-    }
-      try {
-        const res = await verifyTokenRequest(cookies.token)
-        console.log(res);
-        if(!res.data){
-         setIsAuthenticated(false)
-         setLoading(false)   
-        return;
-        }
-        setIsAuthenticated(true)
-        setUser(res.data)
-        setLoading(false)
-      } catch (error) {
-        setIsAuthenticated(false)
-        setUser(null)
-        setLoading(false)
-      }
-    }
-   checkLogin()
-}, [])
 
     return(
         <AuthContext.Provider value={{

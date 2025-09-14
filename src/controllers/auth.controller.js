@@ -30,7 +30,7 @@ try{
     const token = await createAccessToken({id: userSaved._id});
 
     res.cookie('token', token, {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'lax',
         secure: false,
         path: '/',
@@ -71,7 +71,7 @@ try{
     const token = await createAccessToken({id: userFound._id});
 
     res.cookie('token', token, {
-        httpOnly: true,
+        httpOnly: false,
         sameSite: 'lax',
         secure: false,
         path: '/',
