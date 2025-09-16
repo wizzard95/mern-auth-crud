@@ -29,10 +29,11 @@ try{
     const userSaved = await newUser.save();
     const token = await createAccessToken({id: userSaved._id});
 
+    const isProd = process.env.NODE_ENV === 'production'
     res.cookie('token', token, {
         httpOnly: false,
-        sameSite: 'lax',
-        secure: false,
+        sameSite: isProd ? 'none' : 'lax',
+        secure: isProd,
         path: '/',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     })
@@ -70,10 +71,11 @@ try{
 
     const token = await createAccessToken({id: userFound._id});
 
+    const isProd = process.env.NODE_ENV === 'production'
     res.cookie('token', token, {
         httpOnly: false,
-        sameSite: 'lax',
-        secure: false,
+        sameSite: isProd ? 'none' : 'lax',
+        secure: isProd,
         path: '/',
         maxAge: 7 * 24 * 60 * 60 * 1000,
     })
