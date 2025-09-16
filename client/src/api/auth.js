@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const baseURL = (typeof window !== 'undefined' ? import.meta.env.VITE_API_URL : process.env.VITE_API_URL) || 'http://localhost:3003/api'
+
 export const api = axios.create({
-  baseURL: 'http://localhost:3003/api',
+  baseURL,
   withCredentials: true,
 });
 
