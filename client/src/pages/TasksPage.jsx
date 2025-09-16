@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useTasks } from "../context/TasksContext";
+import { Link } from "react-router-dom";
 
 
 function TasksPage() {
@@ -16,7 +17,21 @@ function TasksPage() {
 
   return (
     <div>
-        <h2>Mis Tareas</h2>
+        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
+          <h2>Mis Tareas</h2>
+          <Link 
+            to="/tasks/new" 
+            style={{
+              backgroundColor: '#3b82f6', 
+              color: 'white', 
+              padding: '10px 20px', 
+              borderRadius: '5px', 
+              textDecoration: 'none'
+            }}
+          >
+            + Nueva Tarea
+          </Link>
+        </div>
         {tasks.length === 0 ? (
           <p>No tienes tareas creadas aún.</p>
         ) : (
