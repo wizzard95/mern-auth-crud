@@ -19,7 +19,7 @@ function TasksPage() {
     <div>
         <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
           <h2>Mis Tareas</h2>
-          <Link 
+         {/*  <Link 
             to="/tasks/new" 
             style={{
               backgroundColor: '#3b82f6', 
@@ -30,7 +30,7 @@ function TasksPage() {
             }}
           >
             + Nueva Tarea
-          </Link>
+          </Link> */}
         </div>
         {tasks.length === 0 ? (
           <p>No tienes tareas creadas aún.</p>
