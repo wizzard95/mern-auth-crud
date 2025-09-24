@@ -109,6 +109,14 @@ const signin = async (user) => {
    
 }
 
+const logout = async () => {
+    Cookies.remove("token");
+    setIsAuthenticated(false);
+    setUser(null);
+}
+
+
+
 useEffect(() => {
     if (errors.length > 0) {
         const timer = setTimeout(() => {
@@ -123,6 +131,7 @@ useEffect(() => {
         <AuthContext.Provider value={{
             signup,
             signin,
+            logout,
             loading,
             user,
             isAuthenticated,

@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 
 function NavBar(){
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
 
   return (
@@ -22,7 +22,9 @@ function NavBar(){
                 <Link to='/add-task'>Add Task</Link>
             </li>
             <li>
-                <Link to='/add-task'>Logout</Link>
+                <Link to='/' onClick={() => {
+                  logout();
+                }}>Logout</Link>
             </li>
             </>
            ) : ( 
