@@ -4,9 +4,9 @@ import { useAuth } from "../context/AuthContext";
 
 function NavBar(){
 
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
 
-
+ /*  console.log(user) */
   return (
     <nav className="bg-zinc-700 my-3 flex justify-between py-5 px-10 rounded-lg">
       <Link to='/'>
@@ -16,7 +16,7 @@ function NavBar(){
            {isAuthenticated ? (
             <>
              <li>
-                WELCOME USER
+                WELCOME {user.username}
             </li>
                <li>
                 <Link to='/add-task'>Add Task</Link>
