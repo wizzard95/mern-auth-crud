@@ -23,7 +23,7 @@ export const AuthProvider = ({children}) =>{
     // Verificar autenticación al cargar
     useEffect(() => {
         const checkAuth = async () => {
-            const token = Cookies.get('token')
+            const token = localStorage.getItem('token') || Cookies.get('token')
             console.log('🔍 Verificando autenticación inicial, token:', !!token)
             
             if (token) {
@@ -55,7 +55,13 @@ export const AuthProvider = ({children}) =>{
            setErrors([]) // Limpiar errores anteriores
            const res = await registerRequest(user)
            console.log('✅ Registro exitoso:', res.data);
-           console.log('🍪 Cookies después del registro:', document.cookie);
+           
+           // Guardar token en localStorage
+           if (res.data.token) {
+               localStorage.setItem('token', res.data.token);
+               console.log('💾 Token guardado en localStorage');
+           }
+           
            setUser(res.data)
            setIsAuthenticated(true)
            setLoading(false)
@@ -88,7 +94,13 @@ const signin = async (user) => {
         const res = await loginRequest(user)
         console.log('✅ Respuesta completa:', res)
         console.log('📋 Datos del usuario:', res.data)
-        console.log('🍪 Cookies después del login:', document.cookie);
+        
+        // Guardar token en localStorage
+        if (res.data.token) {
+            localStorage.setItem('token', res.data.token);
+            console.log('💾 Token guardado en localStorage');
+        }
+        
         setUser(res.data)
         setIsAuthenticated(true)
         setLoading(false)
@@ -112,6 +124,7 @@ const signin = async (user) => {
 }
 
 const logout = async () => {
+    localStorage.removeItem("token");
     Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);

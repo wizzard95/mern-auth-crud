@@ -45,6 +45,7 @@ try{
         email: userSaved.email,
         createdAt: userSaved.createdAt,
         updateAt: userSaved.updatedAt,
+        token: token
     }) 
 }catch(error){
     /* console.log(error); */
@@ -85,6 +86,7 @@ try{
         email: userFound.email,
         createdAt: userFound.createdAt,
         updateAt: userFound.updatedAt,
+        token: token
     }
     console.log('✅ Enviando respuesta JSON:', userData);
     res.json(userData) 
@@ -119,10 +121,14 @@ export const profile = async(req, res) => {
 }
 export const verifyToken = async (req, res) => {
    const {token} = req.cookies
+   const authHeader = req.headers.authorization;
+   const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+   
+   const finalToken = token || bearerToken;
 
-   if (!token) return res.status(401).json({message:"unauthorized"})
+   if (!finalToken) return res.status(401).json({message:"unauthorized"})
 
-    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+    jwt.verify(finalToken, TOKEN_SECRET, async (err, user) => {
         if(err) return res.status(401).json({message:"Unauthorized"})
         
         const userFound = await User.findById(user.id)

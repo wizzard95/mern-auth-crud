@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 function ProtectedRoute() {
    const {isAuthenticated, user, loading} = useAuth()
-   const token = Cookies.get('token')
+   const token = localStorage.getItem('token') || Cookies.get('token')
    
    console.log('🔍 ProtectedRoute - Token:', !!token, 'isAuthenticated:', isAuthenticated, 'user:', !!user, 'loading:', loading)
 
