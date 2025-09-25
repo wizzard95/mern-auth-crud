@@ -54,7 +54,8 @@ export const AuthProvider = ({children}) =>{
          try {
            setErrors([]) // Limpiar errores anteriores
            const res = await registerRequest(user)
-           console.log(res.data);
+           console.log('✅ Registro exitoso:', res.data);
+           console.log('🍪 Cookies después del registro:', document.cookie);
            setUser(res.data)
            setIsAuthenticated(true)
            setLoading(false)
@@ -87,6 +88,7 @@ const signin = async (user) => {
         const res = await loginRequest(user)
         console.log('✅ Respuesta completa:', res)
         console.log('📋 Datos del usuario:', res.data)
+        console.log('🍪 Cookies después del login:', document.cookie);
         setUser(res.data)
         setIsAuthenticated(true)
         setLoading(false)
