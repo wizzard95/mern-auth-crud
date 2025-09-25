@@ -11,7 +11,22 @@ import tasksRoutes from "./routes/tasks.routes.js";
 
 const app = express()
 app.use(cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'https://mern-crud-auth-frontend.vercel.app',
+            'https://mern-crud-auth-six.vercel.app'
+        ];
+        
+        // Permitir requests sin origin (como Postman)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('No permitido por CORS'));
+        }
+    },
     credentials: true,
 }))
 app.use(express.json())
