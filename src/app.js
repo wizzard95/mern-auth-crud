@@ -4,9 +4,15 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import authRoutes from "./routes/auth.routes.js"
 import tasksRoutes from "./routes/tasks.routes.js";
+
+// Para servir archivos estáticos en producción
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const app = express()
@@ -23,6 +29,15 @@ app.use(cookieParser())
 
 app.use('/api', authRoutes)
 app.use('/api', tasksRoutes)
+
+// Servir archivos estáticos en producción
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
 
 // Middleware para manejar rutas no encontradas (404)
 app.use((req, res) => {
