@@ -43,18 +43,35 @@ export function TaskProvider({ children }){
     }
 
     const createTask = async (task) => {
-    /*     console.log("task!"); */
-        const res = await createTaskRequest(task)
-        console.log(res);
+        try {
+            setLoading(true)
+            setError(null)
+            const res = await createTaskRequest(task)
+            console.log('Tarea creada:', res.data);
+            
+            // Actualizar la lista de tareas agregando la nueva tarea
+            setTasks(prevTasks => [...prevTasks, res.data])
+        } catch (error) {
+            console.error('Error al crear tarea:', error);
+            setError('Error al crear la tarea')
+        } finally {
+            setLoading(false)
+        }
     }
     const deleteTask = async (id) => {
       try {
+         setLoading(true)
+         setError(null)
          const res = await deleteTaskRequest(id)
-         if(res.status === 204)setTasks(tasks.filter(task => task._id != id))
+         if(res.status === 204) {
+           setTasks(prevTasks => prevTasks.filter(task => task._id !== id))
+         }
       } catch (error) {
-        console.log(error)
+        console.error('Error al eliminar tarea:', error);
+        setError('Error al eliminar la tarea')
+      } finally {
+        setLoading(false)
       }
-    
     }
 
     const getTask = async (id) => {
@@ -69,9 +86,20 @@ export function TaskProvider({ children }){
     }
     const updateTask = async (id, task) => {
       try {
-        await updateTaskRequest(id, task)
+        setLoading(true)
+        setError(null)
+        const res = await updateTaskRequest(id, task)
+        console.log('Tarea actualizada:', res.data);
+        
+        // Actualizar la lista de tareas
+        setTasks(prevTasks => 
+          prevTasks.map(t => t._id === id ? res.data : t)
+        )
       } catch (error) {
-        console.log(error)
+        console.error('Error al actualizar tarea:', error);
+        setError('Error al actualizar la tarea')
+      } finally {
+        setLoading(false)
       }
     }
 
