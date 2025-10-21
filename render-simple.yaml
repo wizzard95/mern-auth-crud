@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: mern-crud-auth-backend
+    name: mi-mern-backend
     env: node
     plan: free
-    buildCommand: npm install --production
+    buildCommand: npm install --production --no-optional
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -13,5 +13,5 @@ services:
     healthCheckPath: /api/health
 
 databases:
-  - name: mern-crud-auth-db
+  - name:  mi-mern-db
     plan: free
