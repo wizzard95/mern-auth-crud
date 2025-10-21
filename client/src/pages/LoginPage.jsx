@@ -12,16 +12,20 @@ const {
   formState: {errors},
   } = useForm();
   
-  const {signin, errors: signinErrors, isAuthenticated} = useAuth();
+  const {signin, errors: signinErrors, isAuthenticated, loading} = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isAuthenticated) navigate('/tasks');
   }, [isAuthenticated]);
 
-const onSubmit = handleSubmit((data) => {
-/*   console.log(data); */
-    signin(data)
+const onSubmit = handleSubmit(async (data) => {
+    console.log('🔍 Intentando iniciar sesión con:', data);
+    try {
+        await signin(data);
+    } catch (error) {
+        console.log('❌ Error en el formulario de login:', error);
+    }
 })
   return (
     <div className="flex h-[calc(100vh-100px)] items-center justify-center">
@@ -53,8 +57,16 @@ const onSubmit = handleSubmit((data) => {
             {errors.password && <p className="text-red-500">
               Password is requiered
             </p>}
-            <button type="submit">
-                Iniciar Sesion
+            <button 
+                type="submit" 
+                disabled={loading}
+                className={`w-full py-2 px-4 rounded-md font-semibold ${
+                    loading 
+                        ? 'bg-gray-500 cursor-not-allowed' 
+                        : 'bg-blue-500 hover:bg-blue-600'
+                } text-white transition-colors`}
+            >
+                {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
         </form>
         <p className="flex gap-x-2 justify-between">

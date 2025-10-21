@@ -120,24 +120,43 @@ export const profile = async(req, res) => {
        /*  res.send('profile') */
 }
 export const verifyToken = async (req, res) => {
-   const {token} = req.cookies
-   const authHeader = req.headers.authorization;
-   const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-   
-   const finalToken = token || bearerToken;
+   try {
+       const {token} = req.cookies
+       const authHeader = req.headers.authorization;
+       const bearerToken = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+       
+       const finalToken = token || bearerToken;
 
-   if (!finalToken) return res.status(401).json({message:"unauthorized"})
+       if (!finalToken) {
+           return res.status(401).json({message:"No token provided"})
+       }
 
-    jwt.verify(finalToken, TOKEN_SECRET, async (err, user) => {
-        if(err) return res.status(401).json({message:"Unauthorized"})
-        
-        const userFound = await User.findById(user.id)
-        if (!userFound) return res.status(401).json({message:"Unauthorized"})
+       jwt.verify(finalToken, TOKEN_SECRET, async (err, user) => {
+           if(err) {
+               console.log('❌ Token verification error:', err.message)
+               return res.status(401).json({message:"Invalid token"})
+           }
+           
+           try {
+               const userFound = await User.findById(user.id)
+               if (!userFound) {
+                   console.log('❌ User not found for ID:', user.id)
+                   return res.status(401).json({message:"User not found"})
+               }
 
-        return res.json({
-            id: userFound._id,
-            username: userFound.username,
-            email: userFound.email,
-        })
-    })
+               console.log('✅ Token verification successful for user:', userFound.email)
+               return res.json({
+                   id: userFound._id,
+                   username: userFound.username,
+                   email: userFound.email,
+               })
+           } catch (dbError) {
+               console.log('❌ Database error during token verification:', dbError)
+               return res.status(500).json({message:"Database error"})
+           }
+       })
+   } catch (error) {
+       console.log('❌ Error in verifyToken:', error)
+       return res.status(500).json({message:"Internal server error"})
+   }
 }

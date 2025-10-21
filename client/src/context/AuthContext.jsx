@@ -37,11 +37,12 @@ export const AuthProvider = ({children}) =>{
                     }
                 } catch (error) {
                     console.log('❌ Error verificando token en carga inicial:', error)
-                    // Limpiar token inválido
+                    // Limpiar completamente el estado de autenticación
                     localStorage.removeItem('token')
                     Cookies.remove('token')
                     setUser(null)
                     setIsAuthenticated(false)
+                    setErrors([])
                 } finally {
                     setLoading(false)
                 }
@@ -99,10 +100,15 @@ const signin = async (user) => {
         console.log('✅ Respuesta completa:', res)
         console.log('📋 Datos del usuario:', res.data)
         
-        // Guardar token en localStorage
+        // Limpiar tokens anteriores antes de guardar el nuevo
+        localStorage.removeItem('token')
+        Cookies.remove('token')
+        
+        // Guardar token en localStorage y cookies para consistencia
         if (res.data.token) {
             localStorage.setItem('token', res.data.token);
-            console.log('💾 Token guardado en localStorage');
+            Cookies.set('token', res.data.token, { expires: 7, secure: false, sameSite: 'lax' });
+            console.log('💾 Token guardado en localStorage y cookies');
         }
         
         setUser(res.data)
@@ -110,6 +116,12 @@ const signin = async (user) => {
         setLoading(false)
     } catch (error) {
         console.log('❌ Error en login:', error)
+        // Limpiar estado en caso de error
+        localStorage.removeItem('token')
+        Cookies.remove('token')
+        setUser(null)
+        setIsAuthenticated(false)
+        
         const data = error?.response?.data
         if (Array.isArray(data)) {
             setErrors(data)
@@ -132,6 +144,7 @@ const logout = async () => {
     Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);
+    setErrors([]);
 }
 
 
@@ -145,12 +158,22 @@ useEffect(() => {
     }
 }, [errors])
 
+// Función para limpiar completamente el estado de autenticación
+const clearAuthState = () => {
+    localStorage.removeItem('token')
+    Cookies.remove('token')
+    setUser(null)
+    setIsAuthenticated(false)
+    setErrors([])
+}
+
 
     return(
         <AuthContext.Provider value={{
             signup,
             signin,
             logout,
+            clearAuthState,
             loading,
             user,
             isAuthenticated,
