@@ -1,0 +1,30 @@
+# Configuración final optimizada para Render
+# Esta es la configuración que debes usar para el deploy
+
+services:
+  - type: web
+    name: mern-crud-auth-backend
+    env: node
+    plan: free
+    buildCommand: npm install --production --no-optional
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3003
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mern-crud-auth-db
+          property: connectionString
+      - key: TOKEN_SECRET
+        generateValue: true
+    healthCheckPath: /api/health
+    autoDeploy: true
+    region: oregon
+    branch: main
+
+databases:
+  - name: mern-crud-auth-db
+    plan: free
+    region: oregon

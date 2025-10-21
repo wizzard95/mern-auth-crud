@@ -1,7 +1,7 @@
 {
-  "name": "client",
+  "name": "mern-crud-auth-frontend",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,12 +9,12 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "tailwind:init": "tailwindcss init -p",
-    "tailwind:build": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+    "tailwind:build": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch",
+    "postinstall": "echo 'Frontend dependencies installed successfully'"
   },
   "dependencies": {
     "axios": "^1.11.0",
     "js-cookie": "^3.0.5",
-    "mern-crud-auth": "file:..",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.62.0",

@@ -1,0 +1,15 @@
+# Configuración para deploy del frontend en Render
+# (Alternativa a Vercel)
+
+services:
+  - type: web
+    name: mern-crud-auth-frontend
+    env: static
+    plan: free
+    buildCommand: npm ci --only=production && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://mern-crud-auth-backend.onrender.com
+    autoDeploy: true
+    region: oregon

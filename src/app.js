@@ -15,7 +15,9 @@ app.use(cors({
         const allowedOrigins = [
             'http://localhost:5173',
             'https://mern-crud-auth-frontend.vercel.app',
-            'https://mern-crud-auth-six.vercel.app'
+            'https://mern-crud-auth-six.vercel.app',
+            'https://mern-crud-auth-frontend.onrender.com',
+            'https://mern-crud-auth.onrender.com'
         ];
         
         // Permitir requests sin origin (como Postman)
@@ -35,6 +37,31 @@ app.use(express.urlencoded({ extended: false }))
 app.use(morgan("dev"))
 
 app.use(cookieParser())
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime(),
+        environment: process.env.NODE_ENV || 'development',
+        version: '1.0.0'
+    });
+});
+
+// Root endpoint
+app.get('/', (req, res) => {
+    res.json({
+        message: 'MERN CRUD Auth API',
+        status: 'running',
+        version: '1.0.0',
+        endpoints: {
+            health: '/api/health',
+            auth: '/api/register, /api/login, /api/verify',
+            tasks: '/api/tasks'
+        }
+    });
+});
 
 app.use('/api', authRoutes)
 app.use('/api', tasksRoutes)

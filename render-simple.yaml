@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: mern-crud-auth-backend
+    env: node
+    plan: free
+    buildCommand: npm install --production
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3003
+    healthCheckPath: /api/health
+
+databases:
+  - name: mern-crud-auth-db
+    plan: free
