@@ -33,10 +33,17 @@ export function TaskProvider({ children }){
          const res = await getTasksRequest()
          console.log('Respuesta completa:', res);
          console.log('Datos de tareas:', res.data);
-        setTasks(res.data)
+        setTasks(res.data || [])
        } catch (error) {
         console.error('Error al obtener tareas:', error);
-        setError('Error al cargar las tareas')
+        if (error.response?.status === 401) {
+            setError('Sesión expirada. Por favor, inicia sesión nuevamente.')
+        } else if (error.response?.status === 403) {
+            setError('No tienes permisos para acceder a las tareas.')
+        } else {
+            setError('Error al cargar las tareas. Verifica tu conexión.')
+        }
+        setTasks([])
        } finally {
          setLoading(false)
        }

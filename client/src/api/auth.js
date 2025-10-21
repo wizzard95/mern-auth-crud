@@ -6,6 +6,7 @@ const baseURL = (typeof window !== 'undefined' ? import.meta.env.VITE_API_URL : 
 export const api = axios.create({
   baseURL,
   withCredentials: true,
+  timeout: 10000, // 10 segundos de timeout
 });
 
 export const registerRequest = (user) => api.post('/api/register', user, { withCredentials: true });

@@ -37,6 +37,9 @@ export const AuthProvider = ({children}) =>{
                     }
                 } catch (error) {
                     console.log('❌ Error verificando token en carga inicial:', error)
+                    // Limpiar token inválido
+                    localStorage.removeItem('token')
+                    Cookies.remove('token')
                     setUser(null)
                     setIsAuthenticated(false)
                 } finally {
@@ -88,6 +91,7 @@ export const AuthProvider = ({children}) =>{
 
 const signin = async (user) => {
     try {
+        setLoading(true)
         setErrors([]) // Limpiar errores anteriores
         console.log('🔍 Enviando login a:', 'http://localhost:3003/api/login')
         console.log('📤 Datos enviados:', user)

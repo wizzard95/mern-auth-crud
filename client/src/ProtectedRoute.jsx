@@ -11,7 +11,11 @@ function ProtectedRoute() {
    // Mostrar loading mientras se verifica la autenticación
    if (loading) {
      console.log('⏳ ProtectedRoute cargando...')
-     return <h1>Cargando...</h1>
+     return (
+       <div className="flex justify-center items-center h-screen">
+         <div className="text-lg">Verificando autenticación...</div>
+       </div>
+     )
    }
 
    // Si no hay token o no está autenticado, redirigir al login
