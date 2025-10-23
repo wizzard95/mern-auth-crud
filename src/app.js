@@ -15,9 +15,11 @@ app.use(cors({
         const allowedOrigins = [
             'http://localhost:5173',
             'https://mern-crud-auth-frontend.vercel.app',
+            'https://mern-auth-crud-pi.vercel.app',
             'https://mern-crud-auth-six.vercel.app',
             'https://mern-crud-auth-frontend.onrender.com',
-            'https://mern-crud-auth.onrender.com'
+            'https://mern-crud-auth.onrender.com',
+            'https://mi-mern-backend.onrender.com'
         ];
         
         // Permitir requests sin origin (como Postman)
