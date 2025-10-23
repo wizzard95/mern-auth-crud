@@ -21,13 +21,15 @@ function NavBar(){
                <li>
                 <Link 
                   to='/add-task'
-                  className="bg-indigo-500 px-4 py-1 rounded-sm"
+                  className="bg-green-500 px-4 py-1 rounded-sm"
                 >Add Task</Link>
             </li>
             <li>
                 <Link to='/' onClick={() => {
                   logout();
-                }}>Logout</Link>
+                }}
+                 className="bg-red-500 px-4 py-1 rounded-sm"
+                >Logout</Link>
             </li>
             </>
            ) : ( 

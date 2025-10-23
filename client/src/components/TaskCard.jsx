@@ -15,9 +15,11 @@ import { Link } from "react-router-dom";
               <div className="flex gap-x-2 items-center">
                 <button onClick={() => {
                   deleteTask(task._id)
-                }}>delete</button>
+                }} className="bg-red-500 px-4 py-1 rounded-sm">Borrar</button>
                 <button>
-                  <Link to={`/tasks/${task._id}`}>edit</Link>
+                  <Link to={`/tasks/${task._id}`}
+                   className="bg-sky-500 px-4 py-1 rounded-sm"
+                  >Editar</Link>
                 </button>
               </div>
                </header>

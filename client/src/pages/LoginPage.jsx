@@ -71,7 +71,7 @@ const onSubmit = handleSubmit(async (data) => {
         </form>
         <p className="flex gap-x-2 justify-between">
           No tienes una cuenta? <Link to="/register"
-          className="text-sky-500"> Sign up</Link>
+          className="bg-sky-500 px-4 py-1 rounded-sm mt-1.5"> Sign up</Link>
         </p>
       </div>
     </div>

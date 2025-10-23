@@ -36,11 +36,7 @@ function TaskFormPage() {
       <div style={{marginBottom: '20px'}}>
         <Link 
           to="/tasks" 
-          style={{
-            color: '#3b82f6', 
-            textDecoration: 'none',
-            fontSize: '14px'
-          }}
+         className="bg-sky-500 px-4 py-1 rounded-sm"
         >
           ← Volver a Tareas
         </Link>
@@ -54,20 +50,14 @@ function TaskFormPage() {
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
             autoFocus
           />
+        
           <textarea rows="3" placeholder="Description"
             {...register('description')}
             className="w-full bg-zinc-700 text-white px-4 py-2 rounded-md my-2"
           ></textarea>
           <button 
             type="submit"
-            style={{
-              backgroundColor: '#10b981',
-              color: 'white',
-              padding: '10px 20px',
-              borderRadius: '5px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
+          className="bg-green-500 px-4 py-1 rounded-sm"
           >
             Guardar Tarea
           </button>
